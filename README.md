@@ -47,11 +47,49 @@
 - 36 个自动化测试全绿，行覆盖率 80.2%；性能基线（1001 文件含 100MB）：冷扫描 752 ms / 缓存扫描 324 ms / 深度校验 886 ms。
 - 细节见 `phases\P2-核心引擎\README.md`。
 
+## 用 git 维护 / 换台电脑继续开发
+
+仓库（`git@github.com:teigkuang/FileVersionHelper.git`）只放"人和 IDE 真正需要的东西"，构建产物与 59 MB 的 exe 不进仓库。规则写在根目录 `.gitignore` + `.gitattributes`：
+
+**进仓库的（151 个文件、约 1.8 MB）**
+
+| 内容 | 为什么 |
+|---|---|
+| `app\src\**`、`app\tests\**`、`app\FvHelper.slnx`、`app\Directory.Build.props`、`app\README.md` | 源码 + 解决方案，Visual Studio / VS Code 打开即能编译 |
+| `docs\**` | 需求、数据格式、架构、路线图、风险 |
+| `phases\**` | 各阶段记录、界面稿、验收截图（含图标候选图） |
+| `tools\**` | 截图 / 造样例 / UI 冒烟脚本 |
+| `samples\**`（含样例里的 `.fvhelper` 库数据） | 手上就有一份可复现的样例库，新机器不用重新造 |
+| `releases\README.md` | 只留版本记录与 SHA256；exe 本身发 GitHub Releases |
+| `.creative-design\**`（脚本 + 图标母版） | 图标可重制（`build_icon.py` / `build_small.py`） |
+| `README.md`、`.gitignore`、`.gitattributes` | 工程说明与仓库规则 |
+
+**不进仓库的**：`app\**\bin\`、`app\**\obj\`（约 208 MB）、`phases\**\spike\**\bin|obj`、`releases\**\*.exe`（59 MB）、`*.pdb`、`*.log`、`*.tmp`、`.vs\`、`.vscode\`（除少量放行的配置）、`%LOCALAPPDATA%\FVHelper\` 下的设置与项目列表。
+
+**在新电脑上开工**
+
+```powershell
+git clone git@github.com:teigkuang/FileVersionHelper.git
+# 装 .NET 10 SDK（10.0.x），装完 dotnet --version 应为 10.0.4xx
+cd FileVersionHelper\app
+dotnet build "FvHelper.slnx" -c Release      # 0 warning / 0 error
+dotnet test "tests\FvHelper.Core.Tests" -c Release    # 40 个用例
+# 出单文件 exe（产物在 src\FvHelper.Desktop\bin\Release\net10.0-windows\win-x64\publish\）
+dotnet publish "src\FvHelper.Desktop" -c Release -r win-x64 --self-contained true `
+  -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true `
+  -p:EnableCompressionInSingleFile=true -p:DebugType=None -p:DebugSymbols=false
+```
+
+- **Visual Studio**：2022 17.12 及以上才认 .NET 10 与 `.slnx`（低版本请升级，或临时把 `.slnx` 换成 `.sln` 新格式仍可生成）。
+- **VS Code**：装 C# Dev Kit 扩展（含 C# 扩展），打开 `app` 目录即可，`.vscode` 里放 `launch.json` 断点调试 WPF。
+- 注意：git 不记录 Windows 的 `Hidden` 属性，`clone` 下来的 `samples` 库文件是普通文件；打开项目时程序会自动补打隐藏属性，不影响使用。
+
 ## 目录导航
 
 ```
 E:\FileEditVersionHelper
 ├─ README.md                      本文件：项目概览与导航
+├─ .gitignore / .gitattributes    仓库规则：什么进版本库、换行与二进制处理
 ├─ docs\                          全局文档（跨阶段长期有效）
 │  ├─ 01-需求规格说明.md
 │  ├─ 02-技术选型与架构.md        .NET 10 + WPF 的对比论证与工程结构
