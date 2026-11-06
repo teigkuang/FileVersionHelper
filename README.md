@@ -88,7 +88,7 @@ dotnet publish "src\FvHelper.Desktop" -c Release -r win-x64 --self-contained tru
 ## 目录导航
 
 ```
-E:\FileEditVersionHelper
+XX\FileVersionHelper
 ├─ README.md                      本文件：项目概览与导航
 ├─ .gitignore / .gitattributes    仓库规则：什么进版本库、换行与二进制处理
 ├─ docs\                          全局文档（跨阶段长期有效）
