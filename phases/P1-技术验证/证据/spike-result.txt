@@ -1,0 +1,46 @@
+=== FVHelper P1 专项验证 ===
+时间: 2026-11-06 18:37:36
+运行时: .NET 10.0.14
+架构: X64 / OS: Microsoft Windows NT 10.0.26300.0
+临时根: C:\Users\Lenovo\AppData\Local\Temp\fvhelper-p1
+
+## V2 长路径
+  LongPathsEnabled = 0
+  创建 >260 目录: OK
+  目标文件路径长度 = 319
+  普通路径写入: OK
+  \\?\ 前缀写入: OK
+  FileInfo 读取(普通路径): OK len=2
+  File.Replace(长路径): OK，替换后长度=11
+  删除 >260 目录树: OK（含长路径清理可用）
+
+## V3 文件占用
+  FileShare.ReadWrite 共享读打开: OK len=9
+  共享读占用中 File.Replace: 失败（符合预期）IOException: The process cannot access the file because it is being used by another process.
+  FileShare.None 独占打开: OK
+  独占时普通读取: 失败（符合预期）IOException
+  独占时 File.Replace: 失败（符合预期）IOException: The process cannot access the file because it is being used by another process.
+  枚举到 ~$ 锁文件: 是（提交时需忽略 ~$* 与 .tmp）
+
+## V4 哈希性能
+  100MB 单文件 SHA-256: 468 ms（约 214 MB/s）hash=892A24B2F3BB10C7...
+  300×2MB（共 600MB）:
+    串行: 2420 ms
+    并行 2 线程: 1167 ms
+    并行 4 线程: 674 ms
+    并行 8 线程: 460 ms
+
+## V5 原子替换
+  A 目标存在+备份: OK target=new backup=old
+  B 目标不存在 File.Replace: 失败（符合预期）FileNotFoundException
+  B 回退 File.Move: OK（首次提交走这条路径）
+  C 只读目标 File.Replace: 失败 UnauthorizedAccessException（恢复属性后重试）
+  C 清属性后重试: OK
+  D 跨盘(C:→D:) File.Replace: 失败（符合预期）IOException: 无法将替换文件移到要被替换的文件。要被替换的文件保持原始名称。
+
+## V6 FileSystemWatcher 递归监听
+  期望: Created=30 Changed=15 Deleted=10 Renamed=3（合计 58 次操作）
+  实测: Created=30 Changed=45 Deleted=10 Renamed=3（事件总数 88）
+  说明: Changed 通常多于操作次数（写入会同时触发 Size/LastWrite），实际实现需按路径去抖合并
+
+=== 结束 ===

@@ -1,0 +1,68 @@
+﻿<Window x:Class="FvHelper.Desktop.CommitWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="提交新版本"
+        Width="640" Height="600"
+        MinWidth="560" MinHeight="480"
+        WindowStartupLocation="CenterOwner"
+        Background="#F5F6F8"
+        FontFamily="Microsoft YaHei UI, Segoe UI"
+        FontSize="13"
+        Foreground="#1F2329">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="标题" FontWeight="SemiBold" Margin="0,0,0,6" />
+        <TextBox Grid.Row="1" x:Name="TitleBox" Padding="8,6" BorderBrush="#E6E8EB" TextChanged="OnTitleChanged" />
+
+        <StackPanel Grid.Row="2" Margin="0,14,0,0">
+            <TextBlock Text="详情（可留空：写改了什么、为什么改、导师意见等）" FontWeight="SemiBold"
+                       Margin="0,0,0,6" />
+            <TextBox x:Name="DetailBox" Height="90" Padding="8,6"
+                     BorderBrush="#E6E8EB" AcceptsReturn="True" TextWrapping="Wrap"
+                     VerticalScrollBarVisibility="Auto" />
+        </StackPanel>
+
+        <DockPanel Grid.Row="3" Margin="0,16,0,6" LastChildFill="True">
+            <TextBlock DockPanel.Dock="Right" x:Name="FilesSummary" Foreground="#8A9099" FontSize="12"
+                       VerticalAlignment="Bottom" />
+            <TextBlock x:Name="FilesHeader" Text="待提交的文件" FontWeight="SemiBold" />
+        </DockPanel>
+
+        <Border Grid.Row="4" Background="#FFFFFF" BorderBrush="#E6E8EB" BorderThickness="1" CornerRadius="6">
+            <ListView x:Name="FileList" BorderThickness="0" Background="Transparent">
+                <ListView.View>
+                    <GridView ColumnHeaderContainerStyle="{StaticResource GridHeaderStyle}">
+                        <GridViewColumn Header="动作" Width="56">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Action}" FontWeight="SemiBold" Foreground="{Binding ActionBrush}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="文件" Width="360" DisplayMemberBinding="{Binding Name}" />
+                        <GridViewColumn Header="大小" Width="90" DisplayMemberBinding="{Binding Size}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Border>
+
+        <DockPanel Grid.Row="5" Margin="0,16,0,0" LastChildFill="False">
+            <TextBlock DockPanel.Dock="Left" x:Name="HintText" Foreground="#8A9099" FontSize="12"
+                       VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="380" />
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="取消" IsCancel="True" Style="{StaticResource SecondaryButton}" Padding="16,6" />
+                <Button x:Name="OkButton" Content="提交" IsDefault="True" Click="OnConfirm" Margin="10,0,0,0"
+                        Style="{StaticResource PrimaryButton}" Padding="18,6" />
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</Window>

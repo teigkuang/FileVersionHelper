@@ -1,0 +1,20 @@
+# 统一换行：源码按 LF 入库，检出时 Windows 上保持原样
+* text=auto
+
+*.ps1   text eol=crlf
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+*.cs    text eol=lf
+*.xaml  text eol=lf
+*.md    text eol=lf
+*.json  text eol=lf
+
+# 二进制，别做换行转换、别做文本 diff
+*.ico  binary
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.dat  binary
+*.docx binary
+*.pdf  binary
+*.exe  binary

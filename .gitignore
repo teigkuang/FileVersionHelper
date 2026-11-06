@@ -1,0 +1,44 @@
+# ── .NET / MSBuild 产物 ─────────────────────────────
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.pdb
+*.dll
+*.exe
+!tools/**
+**/publish/
+TestResults/
+*.trx
+*.coverage
+
+# ── 发布包：只在 GitHub Releases 里发，别塞进仓库 ──
+releases/**/*.exe
+
+# ── 工具链 / 设计工具的临时产物 ───────────────────
+.creative-design/**/*.stdout.bin
+.creative-design/**/*.stderr.bin
+.creative-design/**/*.exitcode.txt
+.creative-design/**/*.log
+
+# ── FVHelper 自己的版本库运行时垃圾 ───────────────
+**/.fvhelper/tmp/
+**/.fvhelper.dat.tmp
+**/.fvhelper.dat.tmp.*
+**/.fvhelper.lock
+
+# ── 编辑器 / 系统 ────────────────────────────────
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+.idea/
+*.swp
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ── 日志与临时文件 ───────────────────────────────
+*.log
+*.tmp
+_dbg/**

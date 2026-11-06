@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/FvHelper.Cli/FvHelper.Cli.csproj" />
+    <Project Path="src/FvHelper.Core/FvHelper.Core.csproj" />
+    <Project Path="src/FvHelper.Desktop/FvHelper.Desktop.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/FvHelper.Core.Tests/FvHelper.Core.Tests.csproj" />
+  </Folder>
+</Solution>
